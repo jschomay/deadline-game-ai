@@ -1,6 +1,7 @@
 import { InworldClient, InworldPacket } from "@inworld/nodejs-sdk";
 import cors from "cors";
 import express from "express";
+import path from "path";
 
 const PORT = 4000;
 
@@ -20,7 +21,11 @@ const client = new InworldClient().setApiKey({
 const app = express();
 
 app.use(cors());
-app.use(express.static("../deadline/dist/"));
+app.use(express.static("static/"));
+
+app.get("/", function (_req, res) {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
 
 app.get("/get_token", async (_, res) => {
   const token = await client.generateSessionToken();
